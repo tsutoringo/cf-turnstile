@@ -1,3 +1,6 @@
+/**
+ * Cloudflare respond structure.
+ */
 export type TurnstileAPISuccessResponse = {
   success: true,
   'challenge_ts': string,
@@ -7,6 +10,9 @@ export type TurnstileAPISuccessResponse = {
   'cdata': string
 };
 
+/**
+ * Cloudflare respond error structure.
+ */
 export type TurnstileAPIErrorResponse = {
   success: false,
   'error-codes': TurnstileAPIErrorCode[]

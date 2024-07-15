@@ -5,5 +5,6 @@
  * 
  */
 
-
 export * from './validate.ts';
+export * from './error.ts';
+export * from './types.ts';

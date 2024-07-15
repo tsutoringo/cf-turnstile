@@ -3,22 +3,26 @@ import { TunstileAPIResponse } from './types.ts';
 
 /**
  * 
+ * [./CfTurnstile.validate](CfTurnstile.prototype.validate) Or [./CfTurnstile.withFormRequest](CfTurnstile.prototype.validate)
  */
-export class CfTurnstileValidator {
+export class CfTurnstile {
   static ENDPOINT = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
 
-  static withAlwaysPassesToken (): CfTurnstileValidator {
-    return new CfTurnstileValidator('1x0000000000000000000000000000000AA');
+  static withAlwaysPassesToken (): CfTurnstile {
+    return new CfTurnstile('1x0000000000000000000000000000000AA');
   }
 
-  static withAlwaysFailsToken (): CfTurnstileValidator {
-    return new CfTurnstileValidator('2x0000000000000000000000000000000AA');
+  static withAlwaysFailsToken (): CfTurnstile {
+    return new CfTurnstile('2x0000000000000000000000000000000AA');
   }
 
-  static withAlreadySpentErrorToken (): CfTurnstileValidator {
-    return new CfTurnstileValidator('3x0000000000000000000000000000000AA');
+  static withAlreadySpentErrorToken (): CfTurnstile {
+    return new CfTurnstile('3x0000000000000000000000000000000AA');
   }
 
+  /**
+   * @param secretKey Secret key provided by cloudflare dashboard
+   */
   constructor (
     public secretKey: string
   ) {
@@ -38,7 +42,7 @@ export class CfTurnstileValidator {
    * async function handlePost(request) {
    *   const body = await request.formData();
    * 
-   *   const response = new CfTurnstileValidator(SECRET_KEY).validate(request):
+   *   const response = new CfTurnstile(SECRET_KEY).validate(request):
    * 
    *   if (response.success) {
    *   	// Your code...
@@ -82,7 +86,7 @@ export class CfTurnstileValidator {
    *   const token = body.get('cf-turnstile-response');
    *   const ip = request.headers.get('CF-Connecting-IP');
    * 
-   *   const response = new CfTurnstileValidator(SECRET_KEY).validate(token, ip):
+   *   const response = new CfTurnstile(SECRET_KEY).validate(token, ip):
    * 
    *   if (response.success) {
    *   	// Your code...
@@ -103,7 +107,7 @@ export class CfTurnstileValidator {
 
     if (idempotencyKey) formData.append('idempotency_key', idempotencyKey);
 
-    const request = new Request(CfTurnstileValidator.ENDPOINT, {
+    const request = new Request(CfTurnstile.ENDPOINT, {
       body: formData,
       method: 'POST'
     });
