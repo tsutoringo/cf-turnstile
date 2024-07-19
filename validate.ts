@@ -98,12 +98,12 @@ export class CfTurnstile {
    * @param idempotencyKey 
    * @returns 
    */
-  validate (token: string, ip: string, idempotencyKey?: string): Promise<TunstileAPIResponse> {
+  validate (token: string, ip?: string, idempotencyKey?: string): Promise<TunstileAPIResponse> {
     const formData = new FormData();
 
     formData.append('secret', this.secretKey);
     formData.append('response', token);
-    formData.append('remoteip', ip);
+    if (ip) formData.append('remoteip', ip);
 
     if (idempotencyKey) formData.append('idempotency_key', idempotencyKey);
 
