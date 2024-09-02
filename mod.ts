@@ -4,13 +4,32 @@
  * @tsutoringo/cf-turnstile is [Cloudflare Turnstile](https://developers.cloudflare.com/turnstile/) API Wrapper
  * 
  * ## Example
- * 
  * ```ts
- * const tunrstileSecretKey = "1x0000000000000000000000000000000AA";
- * const response = await new CfTurnstile(tunrstileSecretKey)
- *     .validate(body['cf-turnstile-response'], ip);
+ * // This is the demo secret key. In production, we recommend
+ * // you store your secret key(s) safely.
+ * const SECRET_KEY = '1x0000000000000000000000000000000AA';
  * 
+ * async function handlePost(request) {
+ *   const body = await request.formData();
+ *   // Turnstile injects a token in "cf-turnstile-response".
+ *   const token = body.get('cf-turnstile-response');
+ *   const ip = request.headers.get('CF-Connecting-IP');
  * 
+ *   const result = await new CfTurnstile(SECRET_KEY).validate(token, ip):
+ * 
+ *   result.match(
+ *     (response) => {
+ *       // Your code...
+ *     },
+ *     (error) => {
+ *       // Error handling...
+ *     }
+ *   );
+ * 
+ *   // Or unwrap
+ *   
+ *   const response = result.unwrap();
+ * }
  * ```
  */
 
