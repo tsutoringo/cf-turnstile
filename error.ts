@@ -1,7 +1,10 @@
-import { TurnstileAPIErrorCode } from "./types.ts";
+import type { TurnstileAPIErrorCode } from "./types.ts";
 
+/**
+ * Turnstile error
+ */
 export class TurnstileError extends Error {
-  constructor(codes: TurnstileAPIErrorCode[]) {
+  constructor(public codes: TurnstileAPIErrorCode[]) {
     super(
       "Cloudflare Turnstile returned error codes: '" + codes.join("', '") + "'",
     );
