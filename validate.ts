@@ -1,5 +1,5 @@
 import { TurnstileError } from "./error.ts";
-import { TunstileAPIResponse } from "./types.ts";
+import type { TunstileAPIResponse } from "./types.ts";
 import { Result } from "jsr:@result/result@1.0";
 
 type CfTurnstileResult<T> = Result<T, TurnstileError>;
