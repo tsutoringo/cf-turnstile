@@ -1,9 +1,11 @@
 import { TurnstileError } from './error.ts';
 import { TunstileAPIResponse } from './types.ts';
+import { Result } from 'jsr:@result/result';
+
+type CfTurnstileResult<T> = Result<T, TurnstileError>;
 
 /**
- * 
- * [./CfTurnstile.validate](CfTurnstile.prototype.validate) Or [./CfTurnstile.withFormRequest](CfTurnstile.prototype.validate)
+ * {@linkcode CfTurnstile.prototype.validate} Or {@linkcode CfTurnstile.prototype.withFormRequest}
  */
 export class CfTurnstile {
   static ENDPOINT = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
@@ -30,51 +32,7 @@ export class CfTurnstile {
   }
 
   /**
-   * 
    * @example
-   * <caption>Shorthand but throws error when field is invalid</caption>
-   * 
-   * ```ts
-   * // This is the demo secret key. In production, we recommend
-   * // you store your secret key(s) safely.
-   * const SECRET_KEY = '1x0000000000000000000000000000000AA';
-   * 
-   * async function handlePost(request) {
-   *   const body = await request.formData();
-   * 
-   *   const response = new CfTurnstile(SECRET_KEY).validate(request):
-   * 
-   *   if (response.success) {
-   *   	// Your code...
-   *   }
-   * }
-   * ```
-   * 
-   * @param request 
-   * @param idempotencyKey 
-   * @returns 
-	 */
-  async withFormRequest (request: Request, idempotencyKey?: string): Promise<{form: FormData, response: TunstileAPIResponse}> {
-    const body = await request.formData();
-
-    const token = body.get('cf-turnstile-response');
-
-    if (!token || !(typeof token === 'string')) throw new TurnstileError('cf-turnstile-response field of body is invalid.');
-
-    const ip = request.headers.get('CF-Connecting-IP');
-
-    if (!ip) throw new TurnstileError('CF-Connecting-IP header is invalid.');
-
-    return {
-      form: body,
-      response: await this.validate(token, ip, idempotencyKey)
-    };
-  }
-
-  /**
-   * @example
-   * <caption>Basic usage</caption>
-   * 
    * ```ts
    * // This is the demo secret key. In production, we recommend
    * // you store your secret key(s) safely.
@@ -86,11 +44,20 @@ export class CfTurnstile {
    *   const token = body.get('cf-turnstile-response');
    *   const ip = request.headers.get('CF-Connecting-IP');
    * 
-   *   const response = new CfTurnstile(SECRET_KEY).validate(token, ip):
+   *   const result = await new CfTurnstile(SECRET_KEY).validate(token, ip):
    * 
-   *   if (response.success) {
-   *   	// Your code...
-   *   }
+   *   result.match(
+   *     (response) => {
+   *       // Your code...
+   *     },
+   *     (error) => {
+   *       // Error handling...
+   *     }
+   *   );
+   * 
+   *   // Or unwrap
+   *   
+   *   const response = result.unwrap();
    * }
    * ```
    * @param token 
@@ -98,7 +65,7 @@ export class CfTurnstile {
    * @param idempotencyKey 
    * @returns 
    */
-  validate (token: string, ip?: string, idempotencyKey?: string): Promise<TunstileAPIResponse> {
+  async validate (token: string, ip?: string, idempotencyKey?: string): Promise<CfTurnstileResult<TunstileAPIResponse>> {
     const formData = new FormData();
 
     formData.append('secret', this.secretKey);
@@ -112,7 +79,13 @@ export class CfTurnstile {
       method: 'POST'
     });
 
-    return this.req(request);
+    const response = await this.req(request);
+
+    if (response.success) {
+      return Result.ok(response)
+    } else {
+      return Result.err(new TurnstileError(response['error-codes']))
+    }
   }
 
   async req (request: Request): Promise<TunstileAPIResponse> {
