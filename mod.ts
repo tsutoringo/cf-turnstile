@@ -1,7 +1,12 @@
 /**
  * @module
+ * 
+ * # @result/cf-turnstile
+ * [![JSR](https://jsr.io/badges/@result/cf-tunrstile)](https://jsr.io/@result/cf-tunrstile)
+ * [![JSR](https://jsr.io/badges/@result/cf-tunrstile/score)](https://jsr.io/@result/cf-tunrstile)
  *
  * @tsutoringo/cf-turnstile is [Cloudflare Turnstile](https://developers.cloudflare.com/turnstile/) API Wrapper
+ * 
  *
  * ## Example
  * ```ts
