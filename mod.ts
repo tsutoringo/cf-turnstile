@@ -2,8 +2,8 @@
  * @module
  * 
  * # @result/cf-turnstile
- * [![JSR](https://jsr.io/badges/@result/cf-tunrstile)](https://jsr.io/@result/cf-tunrstile)
- * [![JSR](https://jsr.io/badges/@result/cf-tunrstile/score)](https://jsr.io/@result/cf-tunrstile)
+ * [![JSR](https://jsr.io/badges/@result/cf-turnstile)](https://jsr.io/@result/cf-turnstile)
+ * [![JSR](https://jsr.io/badges/@result/cf-turnstile/score)](https://jsr.io/@result/cf-turnstile)
  *
  * @tsutoringo/cf-turnstile is [Cloudflare Turnstile](https://developers.cloudflare.com/turnstile/) API Wrapper
  * 
